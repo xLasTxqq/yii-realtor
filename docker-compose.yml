@@ -8,7 +8,6 @@ services:
       - ./:/var/www/
     ports:
       - "80:80"
-    # container_name: nginx
     restart: unless-stopped
     depends_on:
       - php
@@ -19,14 +18,13 @@ services:
       dockerfile: docker/php/Dockerfile
     volumes:
       - ./:/var/www/
-    # container_name: php
     restart: unless-stopped
     depends_on:
       - database
 
   database:
     image: mysql:8.0.30
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./tmp/mysql:/var/lib/mysql
     environment:
@@ -36,11 +34,10 @@ services:
     # ports:
     #   - "3306:3306"
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-    # container_name: mysql
 
   adminer:
     image: adminer
-    restart: always
+    restart: unless-stopped
     depends_on:
       - database
     ports:
