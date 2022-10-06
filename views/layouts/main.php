@@ -37,13 +37,16 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Main', 'url'=> ['main/index']],
-            ['label' => 'Newflat', 'url'=> ['main/newflat']],
-            ['label' => 'Newapplicaiton', 'url'=> ['main/newapplication']],
-            ['label' => 'Applications', 'url'=> ['main/applications']],
+            // ['label' => 'Home', 'url' => ['/site/index']],
+            // ['label' => 'About', 'url' => ['/site/about']],
+            // ['label' => 'Contact', 'url' => ['/site/contact']],
+            // ['label' => 'Main', 'url'=> ['main/index']],
+            // ['label' => 'Newflat', 'url'=> ['main/newflat']],
+            // ['label' => 'Newapplicaiton', 'url'=> ['main/newapplication']],
+            // ['label' => 'Applications', 'url'=> ['main/applications']],
+            ['label'=>'Main','url' => ['appartments/index']],
+            ['label'=>'Create appartment','url' => ['appartments/create'],'visible'=>!Yii::$app->user->isGuest],
+            ['label'=>'Applications','url' => ['applications/index'],'visible'=>!Yii::$app->user->isGuest],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
