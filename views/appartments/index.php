@@ -22,14 +22,20 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= !Yii::$app->user->isGuest ? Html::a('Create Appartment Model', ['create'], ['class' => 'btn btn-success']) : '' ?>
     </p>
 
-    <!-- <?= var_dump($dataProvider); ?> -->
+    <?php if (Yii::$app->session->hasFlash('applicationSubmitted')) : ?>
+
+        <div class="alert alert-success">
+        Your application has been sent.
+        </div>
+
+    <?php endif; ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options' => ['class' => 'text-wrap'],
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            // 'id',
             'house_number',
             'floor',
             'appartment_number',
@@ -56,15 +62,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Status',
                 'attribute' => 'applications.*.status',
                 'value' => function ($data) {
-                    // var_dump($data->getApplications()->where(['status'=>ApplicationModel::STATUS_CUSTOMER])->orwhere(['status'=>ApplicationModel::STATUS_PROCESSED])->one()->status);
-                    // return $data->getApplications()->where(['status'=>ApplicationModel::STATUS_PROCESSED,'status'=>ApplicationModel::STATUS_CUSTOMER])->one()->status;
                     return $data->getApplications()
                         ->where(['status' => ApplicationModel::STATUS_CUSTOMER])
                         ->orwhere(['status' => ApplicationModel::STATUS_PROCESSED])
-                        ->andwhere(['>=','date_meeting',date("Y-m-d H:i:s")])
+                        ->andwhere(['>=', 'date_meeting', date("Y-m-d H:i:s")])
                         ->one()
                         ->status ?? AppartmentModel::STATUS_NEW;
-                    // return $data->applications[0]->status;
                 },
                 'visible' => !Yii::$app->user->isGuest
             ],
@@ -73,11 +76,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'applications.*.date_meeting',
                 'value' => function ($data) {
                     return $data->getApplications()
-                    ->where(['status' => ApplicationModel::STATUS_CUSTOMER])
-                    ->orwhere(['status' => ApplicationModel::STATUS_PROCESSED])
-                    ->andwhere(['>=','date_meeting',date("Y-m-d H:i:s")])
-                    ->one()->date_meeting;
-                    // return $data->applications[0]->date_meeting;
+                        ->where(['status' => ApplicationModel::STATUS_CUSTOMER])
+                        ->orwhere(['status' => ApplicationModel::STATUS_PROCESSED])
+                        ->andwhere(['>=', 'date_meeting', date("Y-m-d H:i:s")])
+                        ->one()->date_meeting;
                 },
                 'visible' => !Yii::$app->user->isGuest
             ],
@@ -86,11 +88,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'applications.*.full_name',
                 'value' => function ($data) {
                     return $data->getApplications()
-                    ->where(['status' => ApplicationModel::STATUS_CUSTOMER])
-                    ->orwhere(['status' => ApplicationModel::STATUS_PROCESSED])
-                    ->andwhere(['>=','date_meeting',date("Y-m-d H:i:s")])
-                    ->one()->full_name;
-                    // return $data->applications[0]->full_name;
+                        ->where(['status' => ApplicationModel::STATUS_CUSTOMER])
+                        ->orwhere(['status' => ApplicationModel::STATUS_PROCESSED])
+                        ->andwhere(['>=', 'date_meeting', date("Y-m-d H:i:s")])
+                        ->one()->full_name;
                 },
                 'visible' => !Yii::$app->user->isGuest
             ],
@@ -98,12 +99,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Purchased phone number',
                 'attribute' => 'applications.*.phone_number',
                 'value' => function ($data) {
-                    // return $data->applications[0]->phone_number;
                     return $data->getApplications()
-                    ->where(['status' => ApplicationModel::STATUS_CUSTOMER])
-                    ->orwhere(['status' => ApplicationModel::STATUS_PROCESSED])
-                    ->andwhere(['>=','date_meeting',date("Y-m-d H:i:s")])
-                    ->one()->phone_number;
+                        ->where(['status' => ApplicationModel::STATUS_CUSTOMER])
+                        ->orwhere(['status' => ApplicationModel::STATUS_PROCESSED])
+                        ->andwhere(['>=', 'date_meeting', date("Y-m-d H:i:s")])
+                        ->one()->phone_number;
                 },
                 'visible' => !Yii::$app->user->isGuest
             ],
@@ -116,6 +116,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
 
 </div>

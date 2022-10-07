@@ -5,19 +5,15 @@ namespace app\controllers;
 use app\models\AppartmentModel;
 use app\models\ApplicationModel;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\rest\ActiveController;
 
 /**
  * ApplicationsController implements the CRUD actions for ApplicationModel model.
  */
 class ApplicationsController extends Controller
 {
-
-    // public $modelClass = 'app\models\ApplicationModel';
     /**
      * @inheritDoc
      */
@@ -49,23 +45,10 @@ class ApplicationsController extends Controller
         }
 
         $applications = ApplicationModel::find();
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => ApplicationModel::find(),
-        //     /*
-        //     'pagination' => [
-        //         'pageSize' => 50
-        //     ],
-        //     'sort' => [
-        //         'defaultOrder' => [
-        //             'id' => SORT_DESC,
-        //         ]
-        //     ],
-        //     */
-        // ]);
 
         $searchModel = new ApplicationModel();
 
-        $dataProvider = $searchModel->search(Yii::$app->request->get(),$applications);
+        $dataProvider = $searchModel->search(Yii::$app->request->get(), $applications);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -84,7 +67,7 @@ class ApplicationsController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -99,7 +82,7 @@ class ApplicationsController extends Controller
     {
         if (!AppartmentModel::findOne(['id' => $appartment_id])) {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }    
+        }
 
         $model = new ApplicationModel();
         if ($this->request->isPost) {
@@ -108,6 +91,7 @@ class ApplicationsController extends Controller
                 ['ApplicationModel' => ['appartment_id' => $appartment_id, 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")]]
             )) && $model->save()) {
                 // return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->session->setFlash('applicationSubmitted');
                 return $this->goHome();
             }
         } else {

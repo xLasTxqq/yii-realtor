@@ -4,19 +4,15 @@ namespace app\controllers;
 
 use app\models\AppartmentModel;
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\rest\ActiveController;
 
 /**
  * AppartmentsController implements the CRUD actions for AppartmentModel model.
  */
 class AppartmentsController extends Controller
 {
-    // public $modelClass = 'app\models\AppartmentModel';
     /**
      * @inheritDoc
      */
@@ -42,7 +38,6 @@ class AppartmentsController extends Controller
      */
     public function actionIndex()
     {
-        //select * from `appartments` where not exists (select * from `applications` where `appartments`.`id` = `applications`.`appartment_id` and (`status` = 'customer'))
         $appartment = AppartmentModel::find();
         if (Yii::$app->user->isGuest) {
             $customer = AppartmentModel::STATUS_CUSTOMER;
@@ -54,19 +49,6 @@ class AppartmentsController extends Controller
                 or (`status` = '$processed') and ('date_meeting' > '$now')))"
             );
         }
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => $appartment,
-        //     /*
-        //     'pagination' => [
-        //         'pageSize' => 50
-        //     ],
-        //     'sort' => [
-        //         'defaultOrder' => [
-        //             'id' => SORT_DESC,
-        //         ]
-        //     ],
-        //     */
-        // ]);
 
         $searchModel = new AppartmentModel();
 
@@ -89,7 +71,7 @@ class AppartmentsController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);

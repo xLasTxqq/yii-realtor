@@ -44,14 +44,10 @@ class ApplicationModel extends \yii\db\ActiveRecord
 
     public function search($params, $query)
     {
-        // $query = $this::find();
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        // загружаем данные формы поиска и производим валидацию
-        // var_dump(!($this->load(array_merge_recursive($params,['ApplicationModel'=>['appartment_id'=>'']])) && $this->validate()));
         if (!($this->load($params) && $this->validate(
             [
                 'full_name',
@@ -67,7 +63,6 @@ class ApplicationModel extends \yii\db\ActiveRecord
             return $dataProvider;
         }
 
-        // изменяем запрос добавляя в его фильтрацию
         $query->andFilterWhere(['id' => $this->id]);
         $query->andFilterWhere(['like', 'full_name', $this->full_name])
             ->andFilterWhere(['like', 'phone_number', $this->phone_number])
@@ -89,7 +84,7 @@ class ApplicationModel extends \yii\db\ActiveRecord
         return [
             [['client_comment', 'manager_comment'], 'string'],
             [['date_meeting', 'date_of_purchase', 'created_at', 'updated_at'], 'safe'],
-            // [['appartment_id'], 'required'],
+            [['appartment_id'], 'required'],
             [['appartment_id'], 'integer'],
             [['full_name', 'phone_number', 'status'], 'string', 'max' => 255],
             [['appartment_id'], 'exist', 'skipOnError' => true, 'targetClass' => AppartmentModel::class, 'targetAttribute' => ['appartment_id' => 'id']],

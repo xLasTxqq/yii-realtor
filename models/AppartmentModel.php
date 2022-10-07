@@ -42,28 +42,24 @@ class AppartmentModel extends \yii\db\ActiveRecord
         return Model::scenarios();
     }
 
-    public function search($params,$query)
+    public function search($params, $query)
     {
-        // $query = $this::find();
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        // загружаем данные формы поиска и производим валидацию
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
 
-        // изменяем запрос добавляя в его фильтрацию
         $query->andFilterWhere(['id' => $this->id]);
         $query->andFilterWhere(['like', 'house_number', $this->house_number])
-              ->andFilterWhere(['floor' => $this->floor])
-              ->andFilterWhere(['appartment_number' => $this->appartment_number])
-              ->andFilterWhere(['number_of_rooms' => $this->number_of_rooms])
-              ->andFilterWhere(['=', 'appartment_area', $this->appartment_area])
-              ->andFilterWhere(['=', 'living_space', $this->living_space])
-              ->andFilterWhere(['like', 'price', $this->price]);
+            ->andFilterWhere(['floor' => $this->floor])
+            ->andFilterWhere(['appartment_number' => $this->appartment_number])
+            ->andFilterWhere(['number_of_rooms' => $this->number_of_rooms])
+            ->andFilterWhere(['=', 'appartment_area', $this->appartment_area])
+            ->andFilterWhere(['=', 'living_space', $this->living_space])
+            ->andFilterWhere(['like', 'price', $this->price]);
 
         return $dataProvider;
     }
@@ -108,7 +104,7 @@ class AppartmentModel extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getApplications()
-    { 
+    {
         return $this->hasMany(ApplicationModel::class, ['appartment_id' => 'id']);
     }
 }

@@ -5,7 +5,7 @@ namespace app\models;
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
     public $id;
-    public $username;
+    public $login;
     public $password;
     public $authKey;
     public $accessToken;
@@ -13,17 +13,10 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     private static $users = [
         '100' => [
             'id' => '100',
-            'username' => 'admin',
+            'login' => 'admin',
             'password' => 'admin',
             'authKey' => 'test100key',
             'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
         ],
     ];
 
@@ -56,10 +49,10 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByLogin($login)
     {
         foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
+            if (strcasecmp($user['login'], $login) === 0) {
                 return new static($user);
             }
         }

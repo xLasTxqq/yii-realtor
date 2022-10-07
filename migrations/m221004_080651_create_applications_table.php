@@ -22,7 +22,7 @@ class m221004_080651_create_applications_table extends Migration
             'manager_comment' => $this->text(),
             'date_of_purchase' => $this->timestamp(),
             'appartment_id' => $this->integer()->notNull(),
-            'created_at' => $this->timestamp(), 
+            'created_at' => $this->timestamp(),
             'updated_at' => $this->timestamp(),
         ]);
 
