@@ -52,22 +52,27 @@ class AppartmentsController extends Controller
                 or (`status` = '$processed') and ('date_meeting' > '$now')))"
             );
         }
-        $dataProvider = new ActiveDataProvider([
-            'query' => $appartment,
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => $appartment,
+        //     /*
+        //     'pagination' => [
+        //         'pageSize' => 50
+        //     ],
+        //     'sort' => [
+        //         'defaultOrder' => [
+        //             'id' => SORT_DESC,
+        //         ]
+        //     ],
+        //     */
+        // ]);
+
+        $searchModel = new AppartmentModel();
+
+        $dataProvider = $searchModel->search(Yii::$app->request->get(),$appartment);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
         ]);
     }
 

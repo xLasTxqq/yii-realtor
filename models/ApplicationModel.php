@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "applications".
@@ -34,6 +36,51 @@ class ApplicationModel extends \yii\db\ActiveRecord
         return 'applications';
     }
 
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
+
+    public function search($params, $query)
+    {
+        // $query = $this::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        // загружаем данные формы поиска и производим валидацию
+        // var_dump(!($this->load(array_merge_recursive($params,['ApplicationModel'=>['appartment_id'=>'']])) && $this->validate()));
+        if (!($this->load($params) && $this->validate(
+            [
+                'full_name',
+                'phone_number',
+                'created_at',
+                'client_comment',
+                'status',
+                'date_meeting',
+                'manager_comment',
+                'date_of_purchase',
+            ]
+        ))) {
+            return $dataProvider;
+        }
+
+        // изменяем запрос добавляя в его фильтрацию
+        $query->andFilterWhere(['id' => $this->id]);
+        $query->andFilterWhere(['like', 'full_name', $this->full_name])
+            ->andFilterWhere(['like', 'phone_number', $this->phone_number])
+            ->andFilterWhere(['like', 'created_at', $this->created_at])
+            ->andFilterWhere(['like', 'client_comment', $this->client_comment])
+            ->andFilterWhere(['like', 'status', $this->status])
+            ->andFilterWhere(['like', 'date_meeting', $this->date_meeting])
+            ->andFilterWhere(['like', 'manager_comment', $this->manager_comment])
+            ->andFilterWhere(['like', 'date_of_purchase', $this->date_of_purchase]);
+
+        return $dataProvider;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -42,7 +89,7 @@ class ApplicationModel extends \yii\db\ActiveRecord
         return [
             [['client_comment', 'manager_comment'], 'string'],
             [['date_meeting', 'date_of_purchase', 'created_at', 'updated_at'], 'safe'],
-            [['appartment_id'], 'required'],
+            // [['appartment_id'], 'required'],
             [['appartment_id'], 'integer'],
             [['full_name', 'phone_number', 'status'], 'string', 'max' => 255],
             [['appartment_id'], 'exist', 'skipOnError' => true, 'targetClass' => AppartmentModel::class, 'targetAttribute' => ['appartment_id' => 'id']],

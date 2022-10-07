@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>['class'=>'text-wrap'],
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -50,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'client_comment:ntext',
             'status',
-            'date_meeting',
+            'date_meeting:datetime',
             'manager_comment:ntext',
             'date_of_purchase:date:Agreement date',
             //'appartment_id',
