@@ -2,18 +2,22 @@
 
 namespace app\controllers;
 
+use app\models\AppartmentModel;
 use app\models\ApplicationModel;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\rest\ActiveController;
 
 /**
  * ApplicationsController implements the CRUD actions for ApplicationModel model.
  */
 class ApplicationsController extends Controller
 {
+
+    // public $modelClass = 'app\models\ApplicationModel';
     /**
      * @inheritDoc
      */
@@ -39,6 +43,11 @@ class ApplicationsController extends Controller
      */
     public function actionIndex()
     {
+
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $applications = ApplicationModel::find();
         // $dataProvider = new ActiveDataProvider([
         //     'query' => ApplicationModel::find(),
@@ -72,6 +81,10 @@ class ApplicationsController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -84,13 +97,18 @@ class ApplicationsController extends Controller
      */
     public function actionCreate($appartment_id)
     {
+        if (!AppartmentModel::findOne(['id' => $appartment_id])) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }    
+
         $model = new ApplicationModel();
         if ($this->request->isPost) {
             if ($model->load(array_merge_recursive(
                 $this->request->post(),
                 ['ApplicationModel' => ['appartment_id' => $appartment_id, 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s")]]
             )) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                // return $this->redirect(['view', 'id' => $model->id]);
+                return $this->goHome();
             }
         } else {
             $model->loadDefaultValues();
@@ -110,6 +128,10 @@ class ApplicationsController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = $this->findModel($id);
 
         if (
@@ -146,6 +168,10 @@ class ApplicationsController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

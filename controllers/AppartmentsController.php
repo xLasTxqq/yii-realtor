@@ -9,12 +9,14 @@ use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\rest\ActiveController;
 
 /**
  * AppartmentsController implements the CRUD actions for AppartmentModel model.
  */
 class AppartmentsController extends Controller
 {
+    // public $modelClass = 'app\models\AppartmentModel';
     /**
      * @inheritDoc
      */
@@ -68,7 +70,7 @@ class AppartmentsController extends Controller
 
         $searchModel = new AppartmentModel();
 
-        $dataProvider = $searchModel->search(Yii::$app->request->get(),$appartment);
+        $dataProvider = $searchModel->search(Yii::$app->request->get(), $appartment);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -84,6 +86,10 @@ class AppartmentsController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -96,6 +102,11 @@ class AppartmentsController extends Controller
      */
     public function actionCreate()
     {
+
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = new AppartmentModel();
 
         if ($this->request->isPost) {
@@ -125,6 +136,11 @@ class AppartmentsController extends Controller
      */
     public function actionUpdate($id)
     {
+
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = $this->findModel($id);
 
         if (
@@ -152,6 +168,10 @@ class AppartmentsController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

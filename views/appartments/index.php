@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Appartment Model', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= !Yii::$app->user->isGuest ? Html::a('Create Appartment Model', ['create'], ['class' => 'btn btn-success']) : '' ?>
     </p>
 
     <!-- <?= var_dump($dataProvider); ?> -->
